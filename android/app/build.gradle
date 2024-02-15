@@ -1,14 +1,11 @@
 plugins {
     id "io.gitlab.arturbosch.detekt" version "$detekt_version"
     id "com.android.application"
-    id "com.google.gms.google-services"
-    id "com.google.firebase.crashlytics"
     id "kotlin-android"
     id "kotlin-parcelize"
     id "kotlin-kapt"
     id "androidx.navigation.safeargs.kotlin"
     id "dagger.hilt.android.plugin"
-    id 'com.google.firebase.firebase-perf'
 }
 
 apply from: 'https://raw.githubusercontent.com/Hipo/macaron/master/config/quality/quality.gradle'
@@ -59,12 +56,12 @@ android {
 
     buildTypes {
         releaseLocal {
-            signingConfig signingConfigs.releaseLocal
+            signingConfig signingConfigs.debug
 
             multiDexEnabled true
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [enableCrashReporting: "true", enableFirebasePerformanceLogcat: "false"]
+            manifestPlaceholders = [enableCrashReporting: "false", enableFirebasePerformanceLogcat: "false"]
         }
 
         release {
@@ -77,13 +74,31 @@ android {
         debug {
             multiDexEnabled true
             minifyEnabled false
-            manifestPlaceholders = [enableCrashReporting: "false", enableFirebasePerformanceLogcat: "true"]
+            manifestPlaceholders = [enableCrashReporting: "false", enableFirebasePerformanceLogcat: "false"]
         }
     }
 
     flavorDimensions "app", "server"
     productFlavors {
         def apiKeyProps = new Properties()
+
+        pera {
+            dimension "app"
+            apiKeyProps.load(new FileInputStream(file('../app/src/pera/api-key.properties')))
+            buildConfigField "String", "ALGORAND_BASE_URL", '"https://node-mainnet.chain.perawallet.app/"'
+            buildConfigField "String", "ALGORAND_API_KEY", apiKeyProps["ALGORAND_API_KEY"]
+            buildConfigField "String", "INDEXER_API_KEY", apiKeyProps["INDEXER_API_KEY"]
+            buildConfigField "String", "MOBILE_API_KEY", apiKeyProps["MOBILE_API_KEY"]
+            buildConfigField "String", "MOBILE_ALGORAND_MAINNET_BASE_URL", '"https://mainnet.api.perawallet.app/"'
+            buildConfigField "String", "MOBILE_ALGORAND_TESTNET_BASE_URL", '"https://testnet.api.perawallet.app/"'
+            buildConfigField "String", "PERA_3D_EXPLORER_BASE_URL", '"https://static-hosting.perawallet.app/3dviewer/index.html"'
+            buildConfigField "String", "DISCOVER_WEBVIEW_USERNAME", apiKeyProps["DISCOVER_WEBVIEW_USERNAME"]
+            buildConfigField "String", "DISCOVER_WEBVIEW_PASSWORD", apiKeyProps["DISCOVER_WEBVIEW_PASSWORD"]
+            buildConfigField "String", "DISCOVER_VERSION", "\"${discoverVersions.prod}\""
+            buildConfigField "String", "DISCOVER_URL", '"https://discover-mobile.perawallet.app/"'
+            buildConfigField "String", "DISCOVER_BROWSE_DAPP_URL", '"https://discover-mobile.perawallet.app/main/browser"'
+            buildConfigField "String", "MELD_URL", '"https://mainnet.api.perawallet.app/v1/onramp-services/meld/redirect-to-fluidmoney/?walletAddress="'
+        }
 
         staging {
             dimension "server"

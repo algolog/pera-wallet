@@ -12,12 +12,12 @@
 
 package com.algorand.android.utils
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import android.util.Log
 
 fun sendErrorLog(errorMessage: String) {
-    FirebaseCrashlytics.getInstance().recordException(Exception(errorMessage))
+    Log.e("FA_ErrorStub", errorMessage)
 }
 
 fun recordException(exception: Exception) {
-    FirebaseCrashlytics.getInstance().recordException(exception)
+    Log.e("FA_ExceptionStub", exception.message ?: "Unknown")
 }

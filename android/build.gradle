@@ -3,7 +3,7 @@
 buildscript {
     ext.kotlin_version = '1.9.22'
     ext.safeargs_gradle_version = '2.7.6'
-    ext.gradle_version = '8.2.1'
+    ext.gradle_version = '8.2.2'
     ext.firebase_crashlytics_version = '2.9.9'
     ext.google_services_version = '4.4.0'
     ext.dagger_gradle_version = '2.50'

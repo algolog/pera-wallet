@@ -1,0 +1,5 @@
+def peraGradlePath = 'src/pera/build.gradle'
+
+if (project.file(peraGradlePath).exists()) {
+    apply from: peraGradlePath
+}
