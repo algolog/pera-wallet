@@ -27,3 +27,6 @@ app/mapping.txt
 app/release.keystore
 
 .DS_Store
+/app/src/beta
+/app/src/betaStaging
+/.github
